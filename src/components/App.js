@@ -7,7 +7,7 @@ export default function App() {
     <BrowserRouter>
       <Topo/>
       <Routes>
-        <Route path="/" element={TelaInicial}/> 
+        <Route path="/" element={<TelaInicial/>} /> 
         {/*<Route path="/sessoes/:idFilme"/>
         <Route path="/assentos/:idSessao"/>
         <Route path="/sucesso"/>*/}

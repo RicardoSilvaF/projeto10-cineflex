@@ -21,10 +21,7 @@ export default function TelaInicial(){
               {listaFilmes.map(filme => (
                 <Filme key={filme.id}>
                   <Link to={`/sessoes/${filme.id}`}>
-                    <img src={filme.url} alt={filme.name} />
-                    <div>
-                      <div>{filme.name}</div>
-                   </div>
+                    <img src={filme.posterURL} alt={filme.name} />
                   </Link>
                 </Filme>
                ))}
