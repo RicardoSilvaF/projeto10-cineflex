@@ -21,7 +21,7 @@ export default function TelaInicial(){
               {listaFilmes.map(filme => (
                 <Filme key={filme.id}>
                   <Link to={`/sessoes/${filme.id}`}>
-                    <img src={filme.posterURL} alt={filme.name} />
+                     <img src={filme.posterURL} alt={filme.name} />
                   </Link>
                 </Filme>
                ))}
@@ -43,16 +43,27 @@ const Header = styled.div`
     align-items: center;
     color: #293845;
     font-size: 24px;
+    letter-spacing: 0.04em;
 `
 const Lista = styled.div`
     display: flex;
     flex-wrap: wrap;
-    margin-right: 30px;
+    
 `
 const Filme = styled.div`
     width: 145px;
     height: 209px;
     margin-bottom: 11px;
     margin-left: 30px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #FFFFFF;
+    box-shadow: 0px 2px 4px 2px rgba(0, 0, 0, 0.1);
+    border-radius: 3px;
+    img {
+        width: 129px;
+        height: 193px;
+        object-fit: cover;
+    }
 `
-

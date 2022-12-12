@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom"
 import Topo from "./Topo.js"
-import TelaInicial from "../pages/TelaInicial.js";
+import TelaInicial from "../pages/TelaInicial";
+import FilmePage from "../pages/FilmePage"
 
 export default function App() {
   return (
@@ -8,9 +9,9 @@ export default function App() {
       <Topo/>
       <Routes>
         <Route path="/" element={<TelaInicial/>} /> 
-        {/*<Route path="/sessoes/:idFilme"/>
+        <Route path="/sessoes/:idFilme" element={<FilmePage />}/>
         <Route path="/assentos/:idSessao"/>
-        <Route path="/sucesso"/>*/}
+        <Route path="/sucesso"/>
       </Routes>
     </BrowserRouter>
   );
