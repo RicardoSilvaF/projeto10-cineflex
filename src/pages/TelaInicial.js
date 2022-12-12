@@ -23,7 +23,7 @@ export default function ExplorePage() {
         <Header>Selecione o filme</Header>
         <Lista>
           {listaFilmes.map(filme => (
-            <Poster key={filme.id}>
+            <Poster key={filme.id} data-test="movie">
               <Link to={`/sessoes/${filme.id}`}>
                 <img src={filme.posterURL} alt={filme.title} />
               </Link>

@@ -2,6 +2,7 @@ import styled from "styled-components"
 import axios from "axios"
 import { useEffect, useState } from "react"
 import { useParams } from "react-router-dom"
+import { Link } from "react-router-dom"
 
 export default function FilmePage(){
     const { idFilme } = useParams()
@@ -25,20 +26,24 @@ export default function FilmePage(){
 
             {filme.days.map((dias) => {
                 return (
-                    <div>
-                    <Dia>{dias.weekday} - {dias.date}</Dia>
-                    <Horarios>
-                        {dias.showtimes.map((horas) => {
-                            return (
-                                <Hora>{horas.name}</Hora>
-                            );
-                        })}
-                    </Horarios>
-                 </div>
+                    <div data-test="movie-day">
+                        <Dia>{dias.weekday} - {dias.date}</Dia>
+                        <Horarios data-test="showtime">
+                            {dias.showtimes.map((horas) => {
+                                return (
+                                    <Link to={`/assentos/${horas.id}`} style={linkStyle}>
+                                        <Hora>
+                                            {horas.name}
+                                        </Hora>
+                                    </Link>
+                                );
+                            })}
+                        </Horarios>
+                    </div>
                 );
             })}
 
-            <Footer>
+            <Footer data-test="footer">
                 <ImagemFooter>
                     <img src={filme.posterURL} alt={filme.title}/>
                 </ImagemFooter>
@@ -126,3 +131,6 @@ const Horarios = styled.div`
     margin-bottom: 23px;
     margin-top: 22px;
 `
+const linkStyle = {
+    textDecoration: "none"
+}
