@@ -2,9 +2,12 @@ import styled from "styled-components"
 import axios from "axios"
 import { useParams } from "react-router-dom"
 import { Link , useNavigate} from "react-router-dom"
+import { useState } from "react";
 
-export default function SucessoPage(){
+
+export default function SucessoPage({dados}){
     const navigate = useNavigate();
+    console.log(dados)
     function fim(){
         navigate("/")
     }
@@ -14,7 +17,7 @@ export default function SucessoPage(){
             
             <Titulo data-test="movie-info">
                 Filme e sessão
-                <h1> filme tal</h1>
+                <h1> {dados.filme} Filme tal</h1>
             </Titulo>
             <Titulo data-test="seats-info">
                 Ingressos

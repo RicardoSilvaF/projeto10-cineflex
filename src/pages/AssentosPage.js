@@ -13,13 +13,16 @@ export default function AssentosPage(){
     const [cpf, setCpf] = useState("")
     const navigate = useNavigate();
     const [dados, setDados] = useState()
-
+    
+    
     function finalizarCompra(){
         if(selecionados.length == 0){
             alert("Selecione um assento")
         }
         else{
-            navigate("/sucesso")
+            let aux = {filme:idSessao.movie.title, day:idSessao.day.date, hora:idSessao.name}
+            setDados(aux)
+            navigate('/sucesso', {dados})
         }
     }
     function alertaIndisponivel(){
