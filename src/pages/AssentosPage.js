@@ -1,11 +1,34 @@
 import styled from "styled-components"
 import axios from "axios"
-import { useEffect, useState } from "react"
+import { useEffect, useState, React } from "react"
 import { useParams } from "react-router-dom"
+import {VERDE, CINZA, AMARELO} from "../styles/Cores"
 
 export default function AssentosPage(){
     const { idSessao } = useParams()
     const [sala, setSala] = useState(undefined)
+    const [selecionados, setSelecionados] = useState([])
+    
+    function alertaIndisponivel(){
+        alert("Esse assento não está disponível")
+    }
+
+    const selecionarCadeira = (cadeiraEscolhida) => {
+        if(selecionados.includes(cadeiraEscolhida)){
+            let aux = -1;
+            for(let i=0;i<selecionados.length;i++){
+                if(selecionados[i] === cadeiraEscolhida){
+                    aux=i;
+                    selecionados.splice(i,1);
+                    setSelecionados(selecionados => [...selecionados]);
+                    break;
+                }
+            }
+        }
+        else{
+            setSelecionados(selecionados => [...selecionados, cadeiraEscolhida]);
+        }
+    }
 
     useEffect(() => {
         const promise = axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/showtimes/${idSessao}/seats`)
@@ -16,7 +39,7 @@ export default function AssentosPage(){
     if (sala === undefined) {
       return <div>Carregando...</div>
     }
-    console.log(sala.seats)
+
     return(
         <Wrapper>
             <Header>Selecione o(s) assentos(s)</Header>
@@ -25,30 +48,49 @@ export default function AssentosPage(){
             {sala.seats.map((chair) => {
                 if(chair.isAvailable === false){
                     return(
-                        <CadeiraInd>{chair.name}</CadeiraInd>
+                        <CadeiraInd onClick={alertaIndisponivel} className={"indisponivel"}>{chair.name}</CadeiraInd>
                     )
                 }
                 else{
                     return (
-                        <Cadeira>{chair.name}</Cadeira>
+                        <Cadeira 
+                            id={chair.id}
+                            className={selecionados.includes(chair.id) ? "selecionado" : "naoSelecionado"}
+                            onClick={() => selecionarCadeira(chair.id)}
+                            >
+                                {chair.name}
+                        </Cadeira>
                     )
                 }
             })}
             </Assentos>
-                <Legendas>
-                    <Legenda>
-                        <BolaVerde></BolaVerde>
-                        <TextoLegenda>Selecionado</TextoLegenda>
-                    </Legenda>
-                    <Legenda>
-                        <BolaLegenda></BolaLegenda>
-                        <TextoLegenda>Disponível</TextoLegenda>
-                    </Legenda>
-                    <Legenda>
-                        <BolaAmarela></BolaAmarela>
-                        <TextoLegenda>Indisponível</TextoLegenda>
-                    </Legenda>
-                </Legendas>
+
+            <Legendas>
+                <Legenda>
+                    <BolaVerde></BolaVerde>
+                    <TextoLegenda>Selecionado</TextoLegenda>
+                </Legenda>
+                <Legenda>
+                    <BolaLegenda></BolaLegenda>
+                    <TextoLegenda>Disponível</TextoLegenda>
+                </Legenda>
+                <Legenda>
+                    <BolaAmarela></BolaAmarela>
+                    <TextoLegenda>Indisponível</TextoLegenda>
+                </Legenda>
+            </Legendas>
+            
+            <ContainerInputs>
+                <h1>Nome do comprador:</h1>
+                <input type="text" placeholder="Digite seu nome..."/>
+                <h1>CPF do comprador:</h1>
+                <input type="text" placeholder="Digite seu CPF..."/>
+            </ContainerInputs>
+
+            <ReservarAssentos>
+                Reservar Assento(s)
+            </ReservarAssentos>
+
 
             <Footer data-test="footer">
                 <ImagemFooter>
@@ -63,6 +105,8 @@ export default function AssentosPage(){
     )
 }
 
+
+
 const Wrapper = styled.div`
   width: 100%;
   height: 100%;
@@ -70,7 +114,7 @@ const Wrapper = styled.div`
 
 const Header = styled.div`
     width: 100%;
-    height: 110px;
+    height: 91px;
     display: flex;
     justify-content: center;
     align-items: center;
@@ -121,18 +165,30 @@ const Assentos = styled.div`
     margin-left: 24px; 
 `
 
-const Cadeira = styled.div`
+const Cadeira = styled.button`
     width: 26px;
     height: 26px;
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #C3CFD9;
     border: 1px solid #808F9D;
     border-radius: 12px;
     margin-right: 7px;
     margin-bottom: 18px;
     font-size: 11px;
+    :hover{
+        cursor: pointer;
+    }
+    background-color: ${props => {
+        switch(props.className){
+            case "selecionado":
+                return VERDE
+            case "indisponivel":
+                return AMARELO
+            default:
+                return CINZA
+        }
+    }}
 `
 
 const Legenda = styled.div`
@@ -151,13 +207,13 @@ const BolaLegenda = styled.div`
 `
 
 const BolaVerde = styled(BolaLegenda)`
-    background: #1AAE9E;
     border: 1px solid #0E7D71;
+    background-color:#1AAE9E;
 `
 
 const BolaAmarela = styled(BolaLegenda)`
-    background: #FBE192;
     border: 1px solid #F7C52B;
+    background-color:#FBE192;
 `
 
 const TextoLegenda = styled.div`
@@ -175,6 +231,35 @@ const Legendas = styled.div`
 `
 
 const CadeiraInd = styled(Cadeira)`
-    background: #FBE192;
     border: 1px solid #F7C52B;
+`
+
+const ContainerInputs = styled.div`
+    margin-top: 41px;
+    margin-left: 24px;
+    h1 {
+        font-size: 18px;
+        color: #293845;
+    }
+    input {
+        width: 324px;
+        height: 51px;
+        font-size: 18px;
+        padding-left: 18px;
+        margin-bottom: 7px;
+    }
+`
+
+const ReservarAssentos = styled.div`
+    width: 225px;
+    height: 42px;
+    display:flex;
+    justify-content: center;
+    align-items: center;
+    color: #FFFFFF;
+    background-color: #E8833A;
+    border-radius: 3px;
+    font-size: 18px;
+    margin-left:72px;
+    margin-top: 50px;
 `
