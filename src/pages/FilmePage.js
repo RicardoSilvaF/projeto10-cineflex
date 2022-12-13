@@ -7,7 +7,6 @@ import { Link } from "react-router-dom"
 export default function FilmePage(){
     const { idFilme } = useParams()
     const [filme, setFilme] = useState(undefined)
-    const [horarios, setHorarios] = useState([])
 
     useEffect(() => {
       const promise = axios.get(`https://mock-api.driven.com.br/api/v8/cineflex/movies/${idFilme}/showtimes`)

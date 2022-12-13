@@ -3,12 +3,25 @@ import axios from "axios"
 import { useEffect, useState, React } from "react"
 import { useParams } from "react-router-dom"
 import {VERDE, CINZA, AMARELO} from "../styles/Cores"
+import { Link , useNavigate} from "react-router-dom"
 
 export default function AssentosPage(){
     const { idSessao } = useParams()
     const [sala, setSala] = useState(undefined)
     const [selecionados, setSelecionados] = useState([])
-    
+    const [nome, setNome] = useState("")
+    const [cpf, setCpf] = useState("")
+    const navigate = useNavigate();
+    const [dados, setDados] = useState()
+
+    function finalizarCompra(){
+        if(selecionados.length == 0){
+            alert("Selecione um assento")
+        }
+        else{
+            navigate("/sucesso")
+        }
+    }
     function alertaIndisponivel(){
         alert("Esse assento não está disponível")
     }
@@ -80,17 +93,29 @@ export default function AssentosPage(){
                 </Legenda>
             </Legendas>
             
-            <ContainerInputs>
-                <h1>Nome do comprador:</h1>
-                <input type="text" placeholder="Digite seu nome..."/>
-                <h1>CPF do comprador:</h1>
-                <input type="text" placeholder="Digite seu CPF..."/>
-            </ContainerInputs>
-
-            <ReservarAssentos>
-                Reservar Assento(s)
-            </ReservarAssentos>
-
+            <form onSubmit={finalizarCompra}>
+                <Wrapper>
+                    <ContainerInputs>
+                        <h1>Nome do comprador:</h1>
+                        <input type="text"
+                            placeholder="Digite seu nome..." 
+                            value={nome} onChange={e => setNome(e.target.value)}
+                            required
+                        />
+                        <h1>CPF do comprador:</h1>
+                        <input type="text"
+                            placeholder="Digite seu CPF..." 
+                            value={cpf} onChange={e => setCpf(e.target.value)}
+                            required
+                        />
+                    </ContainerInputs>
+                    
+                    <ReservarAssentos>
+                            Reservar Assento(s)
+                    </ReservarAssentos>
+                    
+                </Wrapper>
+            </form>
 
             <Footer data-test="footer">
                 <ImagemFooter>
@@ -250,7 +275,7 @@ const ContainerInputs = styled.div`
     }
 `
 
-const ReservarAssentos = styled.div`
+const ReservarAssentos = styled.button`
     width: 225px;
     height: 42px;
     display:flex;
@@ -262,4 +287,9 @@ const ReservarAssentos = styled.div`
     font-size: 18px;
     margin-left:72px;
     margin-top: 50px;
+    border: 0;
+    &:disabled {
+        opacity: 0.6;
+        cursor: not-allowed;
+    }
 `
